@@ -1,0 +1,14 @@
+.idea/
+.gradle/
+/build/
+/gradle
+/out
+
+/gradlew.bat
+/gradlew
+
+*.iml
+*.ipr
+*.iws
+
+twitter.yml
