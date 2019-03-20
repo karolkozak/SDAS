@@ -1,0 +1,27 @@
+server:
+  address: 127.0.0.1
+  port: 8080
+
+
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+endpoints:
+  shutdown:
+    enabled: true
+
+spring:
+  data:
+    neo4j:
+      password: SDAS
+      uri: http://localhost:7474
+      username: SDAS
+
+sdas:
+  cron: 0 * * * * ?
+  dataProvider: twitter
+  socialMediaUrl: https://api.twitter.com/1.1/search/tweets.json?tweet_mode=extended&q=
+  tags:
+    - spring
+    - angular
