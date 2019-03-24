@@ -16,7 +16,7 @@ spring:
     neo4j:
       password: SDAS
       uri: http://localhost:7474
-      username: SDAS
+      username: neo4j
 
 sdas:
   cron: 0 * * * * ?
