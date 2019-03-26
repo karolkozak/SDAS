@@ -1,9 +1,6 @@
 package com.sdas.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 
@@ -11,6 +8,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @NodeEntity
 public class UserProfile {
     @GraphId

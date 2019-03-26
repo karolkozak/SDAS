@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TweetRepository extends Neo4jRepository<TweetEntity, Long> {
-    // This method causes dependency injection. Why?
-//    TweetEntity findFirstByOrderByCreatedAtDesc();
+    TweetEntity findTweetEntityByVendorId(Long vendorId);
 
     @Query("MATCH (t) RETURN t ORDER BY t.createdAt LIMIT 1")
     TweetEntity findLastByCreatedAt();

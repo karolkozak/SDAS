@@ -22,7 +22,7 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
     public void fetchData() {
         TweetEntity lastTweet = getLastSocialDataEntity();
         String tag = sdasProperties.getTags().get(0);
-        // TODO: pass all tags in one query if possible
+        // TODO: pass all tags in one query if possible. If it is not possible, should we store tag in TweetEntity? How we know which id is last for given tag?
         SearchParameters searchParameters = new SearchParameters(tag);
         if (lastTweet != null) {
             searchParameters.sinceId(lastTweet.getVendorId());

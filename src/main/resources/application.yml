@@ -21,7 +21,6 @@ spring:
 sdas:
   cron: 0 * * * * ?
   dataProvider: twitter
-  socialMediaUrl: https://api.twitter.com/1.1/search/tweets.json?tweet_mode=extended&q=
   tags:
-    - spring
-    - angular
+    - '#spring'
+    - '#angular'

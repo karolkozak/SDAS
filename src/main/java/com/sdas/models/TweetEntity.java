@@ -1,9 +1,7 @@
 package com.sdas.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.sun.istack.internal.Nullable;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
@@ -14,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @NodeEntity
 // TweetEntity, because Tweet class exist in spring social twitter
 public class TweetEntity {
@@ -22,8 +21,12 @@ public class TweetEntity {
     private Long vendorId;
     private Date createdAt;
     private String text;
-    @Relationship(type = "IN_REPLY_TO")
+    @Relationship(type = "IN_REPLY_TO_USER")
+    @Nullable
     private UserProfile inReplyToUser;
+    @Relationship(type = "IN_REPLY_TO_STATUS")
+    @Nullable
+    private TweetEntity inReplyToStatus;
     @Relationship(type = "FROM")
     private UserProfile fromUser;
 }
