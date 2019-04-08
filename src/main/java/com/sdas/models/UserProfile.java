@@ -16,4 +16,6 @@ public class UserProfile {
     private Long vendorUserId;
     private String screenName;
     private String name;
+    private String lang;
+    private int followersCount;
 }
