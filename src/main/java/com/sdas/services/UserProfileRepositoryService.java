@@ -26,8 +26,10 @@ public class UserProfileRepositoryService {
         return userProfile;
     }
 
-    // TODO: params could be null
     public UserProfile getUserProfile(Long vendorUserId, String screenName) {
+        if (vendorUserId == null) {
+            return null;
+        }
         UserProfile userProfile = userProfileRepository.findUserProfileByVendorUserId(vendorUserId);
         if (userProfile == null) {
             userProfile = UserProfile.builder()

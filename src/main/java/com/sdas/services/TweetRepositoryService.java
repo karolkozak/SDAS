@@ -31,12 +31,14 @@ public class TweetRepositoryService {
                 .forEach(tweetRepository::save);
     }
 
-    // TODO: param could be null
     /**
      * When we desire to get single tweetEntity we should ask Twitter API by vendorId.
      * As it is just inReplyToStatus we do not have to fetch whole Tweet
      */
     private TweetEntity getTweetEntity(Long vendorId) {
+        if (vendorId == null) {
+            return null;
+        }
         TweetEntity tweetEntity = tweetRepository.findTweetEntityByVendorId(vendorId);
         if (tweetEntity == null) {
             tweetEntity = TweetEntity.builder()
