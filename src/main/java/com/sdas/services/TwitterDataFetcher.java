@@ -33,11 +33,12 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
             SearchResults searchResults;
             do {
                 // TODO: handle rate exceeded exception
+                // TODO: why does different package size return different dataset
                 searchResults = twitterTemplate.searchOperations().search(tag, 100, lastTweetId, Long.MAX_VALUE);
                 tweetRepositoryService.storeTweets(searchResults.getTweets(), tag);
-                // TODO: find last Id for current tag not from whole db
+                // TODO: find last Id for current tag not from whole db, should br fixed after updating problem
                 lastTweetId = getLastSocialDataEntity().getVendorId();
-            } while (!searchResults.isLastPage());
+            } while (searchResults.getTweets().size() != 0);
         }
     }
 

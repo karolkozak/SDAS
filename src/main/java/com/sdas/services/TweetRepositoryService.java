@@ -41,6 +41,7 @@ public class TweetRepositoryService {
         }
         tweetTags.add(tag);
         tweetToSave.setTags(tweetTags);
+        // TODO: saving is not overwriting existing tweets but saves new identical tweet
         tweetRepository.save(tweetToSave);
     }
 
