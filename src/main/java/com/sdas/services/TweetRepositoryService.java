@@ -8,6 +8,8 @@ import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class TweetRepositoryService {
     private final TweetRepository tweetRepository;
     private final UserProfileRepositoryService userService;
 
-    public void storeTweets(List<Tweet> tweets) {
+    public void storeTweets(List<Tweet> tweets, String tag) {
         tweets.stream()
                 .map(tweet -> {
                     UserProfile userProfile = userService.getUserProfile(tweet.getUser());
@@ -28,7 +30,18 @@ public class TweetRepositoryService {
                             .inReplyToUser(userService.getUserProfile(tweet.getInReplyToUserId(), tweet.getInReplyToScreenName()))
                             .build();
                 })
-                .forEach(tweetRepository::save);
+                .forEach(tweet -> checkTagAndSave(tweet, tag));
+    }
+
+    private void checkTagAndSave(TweetEntity tweetToSave, String tag) {
+        TweetEntity sameTweetFromDb = tweetRepository.findTweetEntityByVendorId(tweetToSave.getVendorId());
+        Set<String> tweetTags = new TreeSet<>();
+        if (sameTweetFromDb != null) {
+            tweetTags = sameTweetFromDb.getTags();
+        }
+        tweetTags.add(tag);
+        tweetToSave.setTags(tweetTags);
+        tweetRepository.save(tweetToSave);
     }
 
     /**

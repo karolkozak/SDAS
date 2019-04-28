@@ -22,5 +22,5 @@ sdas:
   cron: 0 * * * * ?
   dataProvider: twitter
   tags:
-    - '#spring'
     - '#angular'
+    - '#java'

@@ -5,7 +5,6 @@ import com.sdas.properties.SdasProperties;
 import com.sdas.properties.TwitterProperties;
 import com.sdas.repositories.TweetRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.social.twitter.api.SearchParameters;
 import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
@@ -21,17 +20,25 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
 
     public void fetchData() {
         TweetEntity lastTweet = getLastSocialDataEntity();
-        String tag = sdasProperties.getTags().get(0);
-        // TODO: pass all tags in one query if possible. If it is not possible, should we store tag in TweetEntity? How we know which id is last for given tag?
-        SearchParameters searchParameters = new SearchParameters(tag);
+        long lastRunTweetId;
         if (lastTweet != null) {
-            searchParameters.sinceId(lastTweet.getVendorId());
+            lastRunTweetId = lastTweet.getVendorId();
+        } else {
+            lastRunTweetId = 1;
         }
-        tweetRepository.findAll();
-        Twitter twitterTemplate = getProviderTemplate();
-        SearchResults searchResults = twitterTemplate.searchOperations().search(searchParameters);
-        // TODO: fetch next pages
-        tweetRepositoryService.storeTweets(searchResults.getTweets());
+        for (String tag : sdasProperties.getTags()) {
+            long lastTweetId = lastRunTweetId;
+            tweetRepository.findAll();
+            Twitter twitterTemplate = getProviderTemplate();
+            SearchResults searchResults;
+            do {
+                // TODO: handle rate exceeded exception
+                searchResults = twitterTemplate.searchOperations().search(tag, 100, lastTweetId, Long.MAX_VALUE);
+                tweetRepositoryService.storeTweets(searchResults.getTweets(), tag);
+                // TODO: find last Id for current tag not from whole db
+                lastTweetId = getLastSocialDataEntity().getVendorId();
+            } while (!searchResults.isLastPage());
+        }
     }
 
     protected Twitter getProviderTemplate() {

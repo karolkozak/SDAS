@@ -7,6 +7,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Date;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +22,7 @@ public class TweetEntity {
     private Long vendorId;
     private Date createdAt;
     private String text;
+    private Set<String> tags;
     @Relationship(type = "IN_REPLY_TO_USER")
     @Nullable
     private UserProfile inReplyToUser;
