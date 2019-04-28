@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface TweetRepository extends Neo4jRepository<TweetEntity, Long> {
     TweetEntity findTweetEntityByVendorId(Long vendorId);
 
-    @Query("MATCH (t) RETURN t ORDER BY t.createdAt LIMIT 1")
+    @Query("MATCH (t:TweetEntity) WHERE t.text is not null RETURN t ORDER BY t.createdAt desc LIMIT 1")
     TweetEntity findLastByCreatedAt();
 }
