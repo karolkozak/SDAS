@@ -5,6 +5,7 @@ import com.sdas.properties.SdasProperties;
 import com.sdas.properties.TwitterProperties;
 import com.sdas.repositories.TweetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.social.twitter.api.SearchParameters;
 import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
@@ -27,17 +28,19 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
             lastRunTweetId = 1;
         }
         for (String tag : sdasProperties.getTags()) {
-            long lastTweetId = lastRunTweetId;
+            SearchParameters searchParameters = new SearchParameters(tag);
+            searchParameters.count(100);
+            searchParameters.sinceId(lastRunTweetId);
             tweetRepository.findAll();
             Twitter twitterTemplate = getProviderTemplate();
             SearchResults searchResults;
             do {
                 // TODO: handle rate exceeded exception
                 // TODO: why does different package size return different dataset
-                searchResults = twitterTemplate.searchOperations().search(tag, 100, lastTweetId, Long.MAX_VALUE);
+                searchResults = twitterTemplate.searchOperations().search(searchParameters);
                 tweetRepositoryService.storeTweets(searchResults.getTweets(), tag);
                 // TODO: find last Id for current tag not from whole db, should br fixed after updating problem
-                lastTweetId = getLastSocialDataEntity().getVendorId();
+                searchParameters.sinceId(getLastSocialDataEntity().getVendorId());
             } while (searchResults.getTweets().size() != 0);
         }
     }
