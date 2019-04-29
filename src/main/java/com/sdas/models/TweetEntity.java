@@ -31,4 +31,9 @@ public class TweetEntity {
     private TweetEntity inReplyToStatus;
     @Relationship(type = "FROM")
     private UserProfile fromUser;
+
+    public TweetEntity makeMe() {
+        this.setText("Patryczek");
+        return this;
+    }
 }
