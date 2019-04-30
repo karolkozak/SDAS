@@ -14,5 +14,5 @@ public interface TweetRepository extends Neo4jRepository<TweetEntity, Long> {
     TweetEntity findLastByCreatedAt();
 
     @Query("MATCH (t:TweetEntity) WHERE t.text is not null and {tag} IN t.tags RETURN t ORDER BY t.createdAt desc LIMIT 1")
-    TweetEntity findTweetCustomPatryk(@Param("tag")String tag);
+    TweetEntity findLastByTag(@Param("tag")String tag);
 }

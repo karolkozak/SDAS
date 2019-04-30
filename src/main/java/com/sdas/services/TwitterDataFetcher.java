@@ -37,7 +37,7 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
             do {
                 searchResults = twitterTemplate.searchOperations().search(searchParameters);
                 tweetRepositoryService.storeTweets(searchResults.getTweets(), tag);
-                searchParameters.sinceId(getLastSocialDataEntity().getVendorId());
+                searchParameters.sinceId(getLastSocialDataEntityByTag(tag).getVendorId());
             } while (searchResults.getTweets().size() != 0);
         }
     }
@@ -53,5 +53,9 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
 
     protected TweetEntity getLastSocialDataEntity() {
         return tweetRepository.findLastByCreatedAt();
+    }
+
+    protected TweetEntity getLastSocialDataEntityByTag(String tag) {
+        return tweetRepository.findLastByTag(tag);
     }
 }
