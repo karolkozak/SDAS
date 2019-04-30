@@ -31,7 +31,6 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
             SearchParameters searchParameters = new SearchParameters(tag);
             searchParameters.count(100);
             searchParameters.sinceId(lastRunTweetId);
-            tweetRepository.findAll();
             Twitter twitterTemplate = getProviderTemplate();
             SearchResults searchResults;
             do {
