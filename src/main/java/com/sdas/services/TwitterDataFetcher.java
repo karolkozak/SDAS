@@ -35,11 +35,8 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
             Twitter twitterTemplate = getProviderTemplate();
             SearchResults searchResults;
             do {
-                // TODO: handle rate exceeded exception
-                // TODO: why does different package size return different dataset
                 searchResults = twitterTemplate.searchOperations().search(searchParameters);
                 tweetRepositoryService.storeTweets(searchResults.getTweets(), tag);
-                // TODO: find last Id for current tag not from whole db, should br fixed after updating problem
                 searchParameters.sinceId(getLastSocialDataEntity().getVendorId());
             } while (searchResults.getTweets().size() != 0);
         }

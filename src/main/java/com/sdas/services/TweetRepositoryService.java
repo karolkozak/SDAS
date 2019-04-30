@@ -37,14 +37,13 @@ public class TweetRepositoryService {
         TweetEntity sameTweetFromDb = tweetRepository.findTweetEntityByVendorId(tweetToSave.getVendorId());
         Set<String> tweetTags = new TreeSet<>();
         if (sameTweetFromDb != null) {
-            // TODO: why all values except for id returned from db are null? for vendorId = 1122571993696673792 there already
-            //  is created empty tweet (without tags/text etc.) on DB but the first time debug gets here is for real tweet with
-            //  same vendorId so this empty node is saved in other way
+            // TODO: if tweet exists in database parse current tweet to it, add tags and save (overwrite old one)
+            //  else save current tweet as new one
             tweetTags = sameTweetFromDb.getTags();
         }
         tweetTags.add(tag);
         tweetToSave.setTags(tweetTags);
-        // TODO: saving is not overwriting existing tweets but saves new identical tweet
+        // TODO: save tweetFromDB instead of tweetToSave to overwrite
         tweetRepository.save(tweetToSave);
     }
 
