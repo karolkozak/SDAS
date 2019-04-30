@@ -19,7 +19,7 @@ spring:
       username: neo4j
 
 sdas:
-  cron: 0 * * * * ?
+  cron: 0 0 * ? * *
   dataProvider: twitter
   tags:
     - '#wybory'
