@@ -26,25 +26,39 @@ public class TweetRepositoryService {
                             .createdAt(tweet.getCreatedAt())
                             .fromUser(userProfile)
                             .text(tweet.getText())
+                            .tags(new TreeSet<>())
                             .inReplyToStatus(getTweetEntity(tweet.getInReplyToStatusId()))
                             .inReplyToUser(userService.getUserProfile(tweet.getInReplyToUserId(), tweet.getInReplyToScreenName()))
                             .build();
                 })
-                .forEach(tweet -> checkTagAndSave(tweet, tag));
+                .forEach(tweet -> checkIfSavedAndSave(tweet, tag));
     }
 
-    private void checkTagAndSave(TweetEntity tweetToSave, String tag) {
-        TweetEntity sameTweetFromDb = tweetRepository.findTweetEntityByVendorId(tweetToSave.getVendorId());
-        Set<String> tweetTags = new TreeSet<>();
-        if (sameTweetFromDb != null) {
-            // TODO: if tweet exists in database parse current tweet to it, add tags and save (overwrite old one)
-            //  else save current tweet as new one
-            tweetTags = sameTweetFromDb.getTags();
+    private void checkIfSavedAndSave(TweetEntity tweetToSave, String tag) {
+        TweetEntity savedTweet = tweetRepository.findTweetEntityByVendorId(tweetToSave.getVendorId());
+        if (savedTweet != null && savedTweet.getText() != null) {
+            addTagAndSave(savedTweet, tag);
+        } else if(savedTweet != null) {
+            overwriteEmptyNode(savedTweet, tweetToSave, tag);
+        } else {
+            addTagAndSave(tweetToSave, tag);
         }
-        tweetTags.add(tag);
-        tweetToSave.setTags(tweetTags);
-        // TODO: save tweetFromDB instead of tweetToSave to overwrite
-        tweetRepository.save(tweetToSave);
+    }
+
+    private void addTagAndSave(TweetEntity tweet, String tag) {
+        Set<String> storedTags = tweet.getTags();
+        storedTags.add(tag);
+        tweet.setTags(storedTags);
+        tweetRepository.save(tweet);
+    }
+
+    /**
+     * Used when there is empty TweetEntity node on database created via REPLY_TO relationship.
+     * This method fills stored tweet and overwrites it
+     */
+    private void overwriteEmptyNode(TweetEntity emptyNode, TweetEntity tweetToSave, String tag) {
+        tweetToSave.setId(emptyNode.getId());
+        addTagAndSave(tweetToSave, tag);
     }
 
     /**
