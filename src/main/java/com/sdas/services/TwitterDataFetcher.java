@@ -20,17 +20,10 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
     private final TweetRepositoryService tweetRepositoryService;
 
     public void fetchData() {
-        TweetEntity lastTweet = getLastSocialDataEntity();
-        long lastRunTweetId;
-        if (lastTweet != null) {
-            lastRunTweetId = lastTweet.getVendorId();
-        } else {
-            lastRunTweetId = 1;
-        }
         for (String tag : sdasProperties.getTags()) {
             SearchParameters searchParameters = new SearchParameters(tag);
             searchParameters.count(100);
-            searchParameters.sinceId(lastRunTweetId);
+            searchParameters.sinceId(setSinceId(tag));
             Twitter twitterTemplate = getProviderTemplate();
             SearchResults searchResults;
             do {
@@ -39,6 +32,17 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
                 searchParameters.sinceId(getLastSocialDataEntityByTag(tag).getVendorId());
             } while (searchResults.getTweets().size() != 0);
         }
+    }
+
+    private long setSinceId(String tag) {
+        TweetEntity lastTweet = getLastSocialDataEntityByTag(tag);
+        long lastRunTweetId;
+        if (lastTweet != null) {
+            lastRunTweetId = lastTweet.getVendorId();
+        } else {
+            lastRunTweetId = 1;
+        }
+        return lastRunTweetId;
     }
 
     protected Twitter getProviderTemplate() {
