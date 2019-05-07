@@ -19,7 +19,7 @@ spring:
       username: neo4j
 
 sdas:
-  cron: 0 0 * ? * *
+  cron: 0 */15 * ? * *
   dataProvider: twitter
   tags:
     - '#wybory'
@@ -34,4 +34,12 @@ sdas:
     - '#SLD'
     - '#PSL'
     - '#Nowoczesna'
+    - '#kukiz15'
+    - '#wiosnabiedronia'
+    - '#piatkabiedronia'
+    - '#polskasercemeuropy'
+    - '#piatkakaczynskiego'
+    - '#lewicarazem'
+    - '#tymrazemglosuje'
+    - '#akcjaewakuacja'
 
