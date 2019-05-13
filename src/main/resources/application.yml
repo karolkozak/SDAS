@@ -2,7 +2,6 @@ server:
   address: 127.0.0.1
   port: 8080
 
-
 management:
   endpoint:
     shutdown:
@@ -19,7 +18,9 @@ spring:
       username: neo4j
 
 sdas:
-  cron: 0 */15 * ? * *
+  cron:
+    fetcher: 0 */15 * ? * *
+    statistics: 0 0 0/12 ? * * *
   dataProvider: twitter
   tags:
     - '#wybory'
@@ -50,4 +51,3 @@ sdas:
     - '#EUelections2019'
     - '#OurVoteOurRights'
     - '#IamEuropean'
-

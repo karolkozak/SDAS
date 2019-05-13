@@ -1,5 +1,6 @@
-package com.sdas.services;
+package com.sdas.services.startup;
 
+import com.sdas.services.TwitterDataFetcher;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

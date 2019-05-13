@@ -1,5 +1,6 @@
-package com.sdas.services;
+package com.sdas.services.crons;
 
+import com.sdas.services.TwitterDataFetcher;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +21,15 @@ public class SocialMediaDataFetcherScheduler {
     @Value("sdas.dataProvider")
     private static String dataProvider;
 
-    @Scheduled(cron = "${sdas.cron}")
+    @Scheduled(cron = "${sdas.cron.fetcher}")
     public void executeSendRateReminderTask() {
-        logExecution("Fetching tweets");
+        logExecution();
         twitterDataFetcher.fetchData();
     }
 
-    private void logExecution(String taskName) {
+    private void logExecution() {
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(taskName + " Task :: Execution Time - {}", DATE_TIME_FORMATTER.format(LocalDateTime.now()));
+            LOGGER.info("Fetching" + dataProvider + " Task :: Execution Time - {}", DATE_TIME_FORMATTER.format(LocalDateTime.now()));
         }
     }
 }
