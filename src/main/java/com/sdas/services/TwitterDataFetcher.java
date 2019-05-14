@@ -29,7 +29,10 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
             do {
                 searchResults = twitterTemplate.searchOperations().search(searchParameters);
                 tweetRepositoryService.storeTweets(searchResults.getTweets(), tag);
-                searchParameters.sinceId(getLastSocialDataEntityByTag(tag).getVendorId());
+                TweetEntity lastTweet = getLastSocialDataEntityByTag(tag);
+                if (lastTweet != null) {
+                    searchParameters.sinceId(lastTweet.getVendorId());
+                }
             } while (searchResults.getTweets().size() != 0);
         }
     }

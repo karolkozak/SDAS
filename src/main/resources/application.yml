@@ -20,7 +20,7 @@ spring:
 sdas:
   cron:
     fetcher: 0 */15 * ? * *
-    statistics: 0 0 0/12 ? * * *
+    statistics: 0 0 0/12 ? * *
   dataProvider: twitter
   tags:
     - '#wybory'
