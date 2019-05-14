@@ -2,7 +2,6 @@ server:
   address: 127.0.0.1
   port: 8080
 
-
 management:
   endpoint:
     shutdown:
@@ -19,8 +18,36 @@ spring:
       username: neo4j
 
 sdas:
-  cron: 0 * * * * ?
+  cron:
+    fetcher: 0 */15 * ? * *
+    statistics: 0 0 0/12 ? * *
   dataProvider: twitter
   tags:
-    - '#spring'
-    - '#angular'
+    - '#wybory'
+    - '#polityka'
+    - '#parlamenteuropejski'
+    - '#europarlament'
+    - '#wyboryparlamentarne'
+    - '#kampaniawyborcza'
+    - '#koalicjaeuropejska'
+    - '#PiS'
+    - '#PO'
+    - '#SLD'
+    - '#PSL'
+    - '#Nowoczesna'
+    - '#kukiz15'
+    - '#wiosnabiedronia'
+    - '#piatkabiedronia'
+    - '#polskasercemeuropy'
+    - '#piatkakaczynskiego'
+    - '#lewicarazem'
+    - '#tymrazemglosuje'
+    - '#akcjaewakuacja'
+    - '#election'
+    - '#eu'
+    - '#europe'
+    - '#vote'
+    - '#ep2019'
+    - '#EUelections2019'
+    - '#OurVoteOurRights'
+    - '#IamEuropean'

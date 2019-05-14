@@ -20,18 +20,32 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
     private final TweetRepositoryService tweetRepositoryService;
 
     public void fetchData() {
-        TweetEntity lastTweet = getLastSocialDataEntity();
-        String tag = sdasProperties.getTags().get(0);
-        // TODO: pass all tags in one query if possible. If it is not possible, should we store tag in TweetEntity? How we know which id is last for given tag?
-        SearchParameters searchParameters = new SearchParameters(tag);
-        if (lastTweet != null) {
-            searchParameters.sinceId(lastTweet.getVendorId());
+        for (String tag : sdasProperties.getTags()) {
+            SearchParameters searchParameters = new SearchParameters(tag);
+            searchParameters.count(100);
+            searchParameters.sinceId(setSinceId(tag));
+            Twitter twitterTemplate = getProviderTemplate();
+            SearchResults searchResults;
+            do {
+                searchResults = twitterTemplate.searchOperations().search(searchParameters);
+                tweetRepositoryService.storeTweets(searchResults.getTweets(), tag);
+                TweetEntity lastTweet = getLastSocialDataEntityByTag(tag);
+                if (lastTweet != null) {
+                    searchParameters.sinceId(lastTweet.getVendorId());
+                }
+            } while (searchResults.getTweets().size() != 0);
         }
-        tweetRepository.findAll();
-        Twitter twitterTemplate = getProviderTemplate();
-        SearchResults searchResults = twitterTemplate.searchOperations().search(searchParameters);
-        // TODO: fetch next pages
-        tweetRepositoryService.storeTweets(searchResults.getTweets());
+    }
+
+    private long setSinceId(String tag) {
+        TweetEntity lastTweet = getLastSocialDataEntityByTag(tag);
+        long lastRunTweetId;
+        if (lastTweet != null) {
+            lastRunTweetId = lastTweet.getVendorId();
+        } else {
+            lastRunTweetId = 1;
+        }
+        return lastRunTweetId;
     }
 
     protected Twitter getProviderTemplate() {
@@ -45,5 +59,9 @@ public class TwitterDataFetcher extends SocialMediaDataFetcher<TweetEntity, Twit
 
     protected TweetEntity getLastSocialDataEntity() {
         return tweetRepository.findLastByCreatedAt();
+    }
+
+    protected TweetEntity getLastSocialDataEntityByTag(String tag) {
+        return tweetRepository.findLastByTag(tag);
     }
 }
